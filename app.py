@@ -5,6 +5,10 @@ import requests
 import xml.etree.ElementTree as ET
 import threading
 from flask_socketio import SocketIO, send, emit
+from dotenv import load_dotenv
+import os
+
+
 
 # Setup
 app = Flask(__name__)
@@ -12,13 +16,17 @@ app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
 socketio = SocketIO(app)
 
+load_dotenv()
+api_key = os.getenv("API_KEY")
+
+
 # Stores locations from api calls
 locations = []
 
 # Fetching data
 def fetch_data():
     global locations
-    api_url = "https://data.bus-data.dft.gov.uk/api/v1/datafeed/708/?api_key=ea08777eb34f28317f57a89bebcd105381ba3f96"
+    api_url = f"https://data.bus-data.dft.gov.uk/api/v1/datafeed/708/?api_key={api_key}"
 
     response = requests.get(api_url)
     print("Hi")
