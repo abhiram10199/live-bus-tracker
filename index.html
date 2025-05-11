@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <style>
+        #map { height: 900px;
+
+         }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div id="map"></div>
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script>
+        // Retrieving location data
+        
+        var map = L.map('map').setView([52.48558621752265, -1.8921568115968914], 14);
+
+        // Layer group to manage multiple markers
+        var busMarerLayer = L.layerGroup().addTo(map)
+
+        var circle = L.circle([53.4048, -2.9812], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 100
+        }).addTo(map)
+        // Fetching bus data
+        async function getData() {
+            const url = "http://127.0.0.1:5000/locations";
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Response Status: ${response.status}`);
+                }
+                const json = await response.json();
+                
+                // clear previous markers
+                busMarerLayer.clearLayers();
+                // Display every bus on the map
+                json.forEach(bus => {
+                    var lat = bus.lat
+                    var long = bus.long
+                    console.log(`Lat: ${lat}`)
+                    console.log(`Long: ${long}`)
+                    var busMarker = L.marker([lat, long]).addTo(busMarerLayer)
+                    
+                });
+                // var bus = L.marker([json['lat'], json['Long']]).addTo(map);
+                
+            } catch (error) {
+                console.error(error.message);
+            }
+
+            
+        }
+
+    getData()
+
+        
+        
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+   
+    </script>
+</body>
+</html>
