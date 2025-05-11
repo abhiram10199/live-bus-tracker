@@ -7,8 +7,8 @@ Right now its very bare-bones, you open the app, it shows you a map with all the
 
 ## Setup
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-cd YOUR_REPO
+git clone https://github.com/LemarTokham/live-bus-tracker.git
+cd live-bus-tracker
 python -m venv env
 source env/bin/activate  # or .\env\Scripts\activate on Windows
 pip install -r requirements.txt
